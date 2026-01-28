@@ -1,0 +1,106 @@
+{% extends 'base.html' %}
+
+{% block title %}{% if form.instance.pk %}Edit Book{% else %}Add New Book{% endif %} | SilentLibrary{% endblock %}
+
+{% block content %}
+<div class="row justify-content-center py-5">
+    <div class="col-lg-7">
+        <div class="card shadow-sm border-0" style="border-radius: 20px; overflow: hidden;">
+            
+            <div class="card-header p-4 text-center border-0" style="background-color: var(--primary-color);">
+                <i class="bi bi-journal-plus text-white fs-1"></i>
+                <h2 class="fw-bold mb-0 text-white">
+                    {% if form.instance.pk %}Update Book Details{% else %}Add New Book{% endif %}
+                </h2>
+                <p class="small text-white opacity-75 mb-0">Ensure all library records are accurate</p>
+            </div>
+
+            <div class="card-body p-4 p-lg-5 bg-white">
+                <form method="post" enctype="multipart/form-data">
+                    {% csrf_token %}
+
+                    {% if form.errors %}
+                        <div class="alert alert-danger rounded-pill px-4 border-0 shadow-sm mb-4">
+                            <i class="bi bi-exclamation-circle me-2"></i>Please correct the highlighted errors.
+                        </div>
+                    {% endif %}
+
+                    <div class="row g-3">
+                        {% for field in form %}
+                            <div class="col-12 mb-3">
+                                <label class="form-label fw-bold small text-uppercase" style="color: var(--primary-color);">
+                                    {{ field.label }}
+                                </label>
+                                
+                                {{ field }}
+                                
+                                {% if field.help_text %}
+                                    <div class="form-text small text-muted">{{ field.help_text }}</div>
+                                {% endif %}
+                                
+                                {% for error in field.errors %}
+                                    <div class="text-danger small mt-1 fw-bold">
+                                        <i class="bi bi-x-circle me-1"></i>{{ error }}
+                                    </div>
+                                {% endfor %}
+                            </div>
+                        {% endfor %}
+                    </div>
+
+                    <hr class="my-4 opacity-25">
+
+                    <div class="d-grid gap-2 d-md-flex justify-content-md-end">
+                        <a href="{% url 'book_list' %}" class="btn btn-light px-4 rounded-pill text-muted fw-bold">
+                            Cancel
+                        </a>
+                        <button type="submit" class="btn-primary-custom px-5">
+                            <i class="bi bi-check-circle me-2"></i>{% if form.instance.pk %}Update Book{% else %}Save Book{% endif %}
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+    /* Targeting Django's form widgets to apply our #1A3E6B theme */
+    input[type="text"], 
+    input[type="number"], 
+    input[type="file"], 
+    input[type="url"],
+    textarea, 
+    select {
+        display: block;
+        width: 100%;
+        padding: 0.75rem 1.25rem;
+        font-size: 0.95rem;
+        font-weight: 400;
+        line-height: 1.5;
+        color: #333;
+        background-color: #fcfcfc;
+        border: 2px solid #eee;
+        border-radius: 15px; /* Modern rounded look */
+        transition: all .2s ease-in-out;
+    }
+
+    /* Focus state using the Primary Color */
+    input:focus, textarea:focus, select:focus {
+        background-color: #fff;
+        border-color: var(--primary-color);
+        outline: 0;
+        box-shadow: 0 0 0 0.25rem rgba(26, 62, 107, 0.1);
+    }
+
+    /* Custom styling for the file upload button */
+    input[type="file"]::file-selector-button {
+        background-color: var(--primary-color);
+        color: white;
+        border: none;
+        padding: 0.2rem 1rem;
+        border-radius: 10px;
+        margin-right: 15px;
+        cursor: pointer;
+    }
+</style>
+{% endblock %}

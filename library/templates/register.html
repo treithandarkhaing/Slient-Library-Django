@@ -1,0 +1,89 @@
+{% extends 'base.html' %}
+
+{% block title %}Register - SilentLibrary{% endblock %}
+
+{% block content %}
+
+<div class="row justify-content-center py-5">
+    <div class="col-md-8 col-lg-5">
+
+        <div class="card shadow-sm border-0" style="border-radius: 20px; overflow: hidden;">
+            <div class="card-header p-4 text-center border-0" style="background-color: var(--primary-color);">
+                <i class="bi bi-person-plus text-white fs-1"></i>
+                <h4 class="mb-0 text-white fw-bold">Create Account</h4>
+                <p class="small text-white opacity-75 mb-0">Join our library community today</p>
+            </div>
+            
+            <div class="card-body p-4 p-lg-5 bg-white">
+                <form method="post" novalidate>
+                    {% csrf_token %}
+
+                    <div class="mb-3">
+                        <label class="form-label fw-bold small text-uppercase" style="color: var(--primary-color);">Username</label>
+                        <input type="text" name="username" class="form-control custom-input" required autofocus placeholder="Choose a unique username">
+                    </div>
+
+                    <div class="row">
+                        <div class="col-md-6 mb-3">
+                            <label class="form-label fw-bold small text-uppercase" style="color: var(--primary-color);">First name</label>
+                            <input type="text" name="first_name" class="form-control custom-input" required placeholder="First name">
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <label class="form-label fw-bold small text-uppercase" style="color: var(--primary-color);">Last name</label>
+                            <input type="text" name="last_name" class="form-control custom-input" required placeholder="Last name">
+                        </div>
+                    </div>
+
+                    <div class="mb-3">
+                        <label class="form-label fw-bold small text-uppercase" style="color: var(--primary-color);">Email</label>
+                        <input type="email" name="email" class="form-control custom-input" required placeholder="email@example.com">
+                    </div>
+
+                    <div class="mb-3">
+                        <label class="form-label fw-bold small text-uppercase" style="color: var(--primary-color);">Password</label>
+                        <input type="password" name="password" class="form-control custom-input" required placeholder="Create a strong password">
+                    </div>
+
+                    <div class="mb-4">
+                        <label class="form-label fw-bold small text-uppercase" style="color: var(--primary-color);">Confirm Password</label>
+                        <input type="password" name="confirm_password" class="form-control custom-input" required placeholder="Repeat your password">
+                    </div>
+
+                    <button type="submit" class="btn-primary-custom w-100 py-2 shadow-sm">
+                        <i class="bi bi-check2-circle me-2"></i>Register Now
+                    </button>
+                </form>
+            </div>
+
+            <div class="card-footer bg-light border-0 text-center py-3">
+                <small class="text-muted">Already have an account? 
+                    <a href="{% url 'login' %}" class="fw-bold text-decoration-none" style="color: var(--primary-color);">Login here</a>
+                </small>
+            </div>
+        </div>
+
+    </div>
+</div>
+
+<style>
+    /* Consistent Input Styling */
+    .custom-input {
+        display: block;
+        width: 100%;
+        padding: 0.75rem 1.25rem;
+        font-size: 0.95rem;
+        background-color: #fcfcfc;
+        border: 2px solid #eee;
+        border-radius: 15px;
+        transition: all .2s ease-in-out;
+    }
+
+    .custom-input:focus {
+        background-color: #fff;
+        border-color: var(--primary-color);
+        outline: 0;
+        box-shadow: 0 0 0 0.25rem rgba(26, 62, 107, 0.1);
+    }
+</style>
+
+{% endblock %}

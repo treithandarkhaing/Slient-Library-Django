@@ -1,0 +1,118 @@
+{% extends "base.html" %}
+
+{% block title %}Book Collection - SilentLibrary{% endblock %}
+
+{% block content %}
+<div class="d-flex justify-content-between align-items-center mb-4 mt-2">
+    <h2 class="fw-bold" style="color: var(--primary-color);">Book Collection</h2>
+    
+    {% if user.is_superuser or user.is_staff %}
+    <a href="{% url 'book_create' %}" class="btn-primary-custom shadow-sm">
+        <i class="bi bi-plus-lg me-1"></i> Add New Book
+    </a>
+    {% endif %}
+</div>
+
+<div class="card shadow-sm border-0" style="border-radius: 20px; overflow: hidden;">
+    <div class="card-body p-0">
+        <div class="table-responsive">
+            <table class="table table-hover align-middle mb-0">
+                <thead style="background-color: #f1f4f8;">
+                    <tr>
+                        <th class="ps-4 py-3 text-uppercase small fw-bold" style="color: var(--primary-color);">Cover</th>
+                        <th class="py-3 text-uppercase small fw-bold" style="color: var(--primary-color);">Book Details</th>
+                        <th class="py-3 text-uppercase small fw-bold" style="color: var(--primary-color);">Category</th>
+                        <th class="py-3 text-uppercase small fw-bold" style="color: var(--primary-color);">ISBN</th>
+                        <th class="py-3 text-center text-uppercase small fw-bold" style="color: var(--primary-color);">Availability</th>
+                        
+                        {% if user.is_superuser or user.is_staff %}
+                        <th class="py-3 text-end pe-4 text-uppercase small fw-bold" style="color: var(--primary-color);">Actions</th>
+                        {% endif %}
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for book in books %}
+                    <tr>
+                        <td class="ps-4">
+                            {% if book.cover_pic %}
+                                <img src="{{ book.cover_pic.url }}" alt="{{ book.title }}" class="rounded shadow-sm" style="width: 60px; height: 85px; object-fit: cover; border: 1px solid #eee;">
+                            {% else %}
+                                <div class="bg-light text-muted d-flex align-items-center justify-content-center rounded border" style="width: 60px; height: 85px; font-size: 0.7rem;">
+                                    <i class="bi bi-image small"></i>
+                                </div>
+                            {% endif %}
+                        </td>
+                        <td>
+                            <div class="fw-bold mb-0" style="color: var(--primary-color);">{{ book.title }}</div>
+                            <div class="text-muted small">by {{ book.author }}</div>
+                            <div class="text-muted small text-truncate" style="max-width: 200px; opacity: 0.8;">{{ book.description|truncatechars:50 }}</div>
+                        </td>
+                        <td>
+                            <span class="badge rounded-pill border fw-normal px-3" style="color: var(--secondary-color); border-color: var(--secondary-color) !important;">
+                                {{ book.category }}
+                            </span>
+                        </td>
+                        <td><code class="text-muted small">{{ book.isbn }}</code></td>
+                        <td class="text-center">
+                            {% if book.available_copies > 0 %}
+                                <span class="badge bg-success-subtle text-success border border-success-subtle rounded-pill px-3">
+                                    {{ book.available_copies }} In Stock
+                                </span>
+                            {% else %}
+                                <span class="badge bg-danger-subtle text-danger border border-danger-subtle rounded-pill px-3">
+                                    Out of Stock
+                                </span>
+                            {% endif %}
+                        </td>
+                        
+                        {% if user.is_superuser or user.is_staff %}
+                        <td class="text-end pe-4">
+                            <div class="btn-group shadow-sm" style="border-radius: 10px; overflow: hidden;">
+                                <a href="{% url 'book_update' book.id %}" class="btn btn-white btn-sm border" title="Edit">
+                                    <i class="bi bi-pencil-square text-primary"></i>
+                                </a>
+                                <button type="button" class="btn btn-white btn-sm border" data-bs-toggle="modal" data-bs-target="#deleteModal{{ book.id }}" title="Delete">
+                                    <i class="bi bi-trash3 text-danger"></i>
+                                </button>
+                            </div>
+
+                            <div class="modal fade" id="deleteModal{{ book.id }}" tabindex="-1" aria-hidden="true">
+                                <div class="modal-dialog modal-dialog-centered">
+                                    <div class="modal-content border-0 shadow" style="border-radius: 20px;">
+                                        <div class="modal-header border-0 pb-0">
+                                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                        </div>
+                                        <div class="modal-body py-4 text-center">
+                                            <div class="mb-3">
+                                                <i class="bi bi-exclamation-circle text-danger display-4"></i>
+                                            </div>
+                                            <h4 class="fw-bold" style="color: var(--primary-color);">Delete Book?</h4>
+                                            <p class="text-muted px-4">Are you sure you want to remove <strong>"{{ book.title }}"</strong> from the library? This cannot be undone.</p>
+                                        </div>
+                                        <div class="modal-footer border-0 justify-content-center pb-4">
+                                            <button type="button" class="btn btn-light rounded-pill px-4" data-bs-dismiss="modal">Cancel</button>
+                                            <form action="{% url 'book_delete' book.id %}" method="POST" class="d-inline">
+                                                {% csrf_token %}
+                                                <button type="submit" class="btn btn-danger rounded-pill px-4">Delete Permanently</button>
+                                            </form>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </td>
+                        {% endif %}
+                    </tr>
+                    {% empty %}
+                    <tr>
+                        <td colspan="6" class="text-center py-5 text-muted">
+                            <i class="bi bi-inbox display-4 d-block mb-3 opacity-25"></i>
+                            <p class="mb-0">No books found in the library database.</p>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+{% endblock %}

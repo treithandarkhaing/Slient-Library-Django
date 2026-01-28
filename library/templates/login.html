@@ -1,0 +1,68 @@
+{% extends 'base.html' %}
+
+{% block title %}Login - SilentLibrary{% endblock %}
+
+{% block content %}
+
+<div class="row justify-content-center py-5">
+    <div class="col-md-6 col-lg-4">
+
+        <div class="card shadow-sm border-0" style="border-radius: 20px; overflow: hidden;">
+            <div class="card-header p-4 text-center border-0" style="background-color: var(--primary-color);">
+                <i class="bi bi-shield-lock text-white fs-1"></i>
+                <h4 class="mb-0 text-white fw-bold">Sign In</h4>
+                <p class="small text-white opacity-75 mb-0">Access your library account</p>
+            </div>
+            
+            <div class="card-body p-4">
+                <form method="post">
+                    {% csrf_token %}
+
+                    <div class="mb-3">
+                        <label class="form-label fw-bold small text-uppercase" style="color: var(--primary-color);">Username</label>
+                        <input type="text" name="username" class="form-control custom-input" required autofocus placeholder="Enter username">
+                    </div>
+
+                    <div class="mb-4">
+                        <label class="form-label fw-bold small text-uppercase" style="color: var(--primary-color);">Password</label>
+                        <input type="password" name="password" class="form-control custom-input" required placeholder="Enter password">
+                    </div>
+
+                    <button type="submit" class="btn-primary-custom w-100 py-2 shadow-sm">
+                        <i class="bi bi-box-arrow-in-right me-2"></i>Login
+                    </button>
+                </form>
+            </div>
+
+            <div class="card-footer bg-light border-0 text-center py-3">
+                <small class="text-muted">Don't have an account? 
+                    <a href="{% url 'register' %}" class="fw-bold text-decoration-none" style="color: var(--primary-color);">Register</a>
+                </small>
+            </div>
+        </div>
+
+    </div>
+</div>
+
+<style>
+    /* Styling for the login inputs to match your form theme */
+    .custom-input {
+        display: block;
+        width: 100%;
+        padding: 0.75rem 1.25rem;
+        font-size: 0.95rem;
+        background-color: #fcfcfc;
+        border: 2px solid #eee;
+        border-radius: 15px;
+        transition: all .2s ease-in-out;
+    }
+
+    .custom-input:focus {
+        background-color: #fff;
+        border-color: var(--primary-color);
+        outline: 0;
+        box-shadow: 0 0 0 0.25rem rgba(26, 62, 107, 0.1);
+    }
+</style>
+
+{% endblock %}
